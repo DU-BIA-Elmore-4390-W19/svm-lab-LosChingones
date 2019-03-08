@@ -1,6 +1,6 @@
 ---
 title: "Untitled"
-author: "Your Name Goes Here"
+author: "Alejandro Arboleda"
 date: "3/5/2019"
 output: github_document
 ---
@@ -14,8 +14,33 @@ text.
 
     a. Create a training sample that has roughly 80% of the observations. Use
   `set.seed(19823)`.
+```{r}
+df <- OJ
+set.seed(19823)
+inTraining <- createDataPartition(df$Purchase, 
+                                  p = .8,
+                                  list = F)
+training <- df[inTraining, ]
+testing  <- df[-inTraining, ]
+```
+  
     b. Use the `kernlab` package to fit a support vector classifier to the 
   training data using `C = 0.01`. 
+```{r}
+# heart_svc <- ksvm(Purchase ~ ., data = training,
+#                   type = "C-svc", kernel = 'vanilladot', prob.model = TRUE)
+# fits_svc <- predict(heart_svc, newdata = training, type = "probabilities")
+# svc_pred <- mutate(new_fits, svc_probs = fits_svc[, 2])
+# p <- ggplot(data = svc_pred,
+#             aes(d = default, m = pprobs))
+# p + geom_roc(n.cuts = 0, col = "navy") +
+#   geom_roc(aes(d = default, m = svc_probs), n.cuts = 0, col = "#6e0000") +
+#   style_roc()
+```
+```{r}
+confusionMatrix(table(predict(heart_svc, newdata = testing), testing$ahd), positive = "Yes")
+```
+  
     c. Compute the confusion matrix for the training data. Report the overall 
   error rates, sensitivity, and specificity. 
     d. Construct the ROC curve. 
